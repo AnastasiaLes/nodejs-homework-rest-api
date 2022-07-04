@@ -2,9 +2,12 @@ const signup = require('./signup');
 const login = require('./login');
 const getCurrent = require('./getCurrent');
 const logout = require('./logout');
+const updateSubscription = require('./updateSubsctiption');
 
 module.exports = {
     signup,
     login,
-    getCurrent
+    getCurrent,
+    logout,
+    updateSubscription
 }
