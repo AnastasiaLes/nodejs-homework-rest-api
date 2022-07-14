@@ -1,5 +1,10 @@
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
+const sgMail = require('@sendgrid/mail');
+
+const { SENDGRID_API_KEY } = process.env;
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 const { User } = require('../../models/user')
 
