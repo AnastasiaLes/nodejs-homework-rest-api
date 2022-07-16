@@ -1,23 +1,10 @@
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
-const sgMail = require('@sendgrid/mail');
-
-
-const { SENDGRID_API_KEY } = process.env;
-
-sgMail.setApiKey(SENDGRID_API_KEY);
-
-const mail = {
-    to: "silvazoua@gmail.com",
-    from: "bambina_nas@yahoo.com",
-    subject: "New user registered",
-    html: "<p>Welcome to our site!</p>"
-}
-
+const idGenerate = require('bson-objectid');
 
 const { User } = require('../../models/user')
 
-const { createError } = require('../../helpers');
+const { createError, sendMail } = require('../../helpers');
 
 const signup = async (req, res) => {
     const { email, password } = req.body;
@@ -29,8 +16,19 @@ const signup = async (req, res) => {
     
     const hashPassword = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
-    const result = await User.create({...req.body, password: hashPassword, avatarURL});
-    
+    const verificationToken = idGenerate();
+    const result = await User.create({
+        ...req.body,
+        password: hashPassword,
+        avatarURL,
+        verificationToken
+    });
+    const mail = {
+        to: "email",
+        subject: "New user registered",
+        html: `<a target="_blank" href="http://localhost:3000/api/auth/verify/${verificationToken}">Click here to confirm your email</a>`
+    }
+    await sendMail(mail);
     res.status(201).json({
         user: {
             email: result.email,
