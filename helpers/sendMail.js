@@ -10,11 +10,4 @@ const sendMail = async (data) => {
     return true;
 }
 
-// const mail = {
-//     to: "silvazoua@gmail.com",
-//     from: "bambina_nas@yahoo.com",
-//     subject: "New user registered",
-//     html: "<p>Welcome to our site!</p>"
-// }
-
 module.exports = sendMail;
